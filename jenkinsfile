@@ -1,24 +1,7 @@
 pipeline {
     agent any
-    environment {
-        DOCKER_HUB_CREDENTIALS = credentials('DOCKER_HUB_CREDENTIALS') // Make sure this matches your Jenkins credentials ID
-    }
-    triggers {
-        // Poll the repository every 5 minutes (adjust as necessary)
-        pollSCM('H/5 * * * *')
-    }
     stages {
-        stage('Checkout SCM') {
-            steps {
-                script {
-                    def branchName = env.BRANCH_NAME ?: 'main'
-                    checkout([$class: 'GitSCM', branches: [[name: "*/${main}"]],
-                              doGenerateSubmoduleConfigurations: false, extensions: [],
-                              userRemoteConfigs: [[url: '',
-                                                   credentialsId: '790d4f9c-ab11-4f3a-99d1-d9d4e98e4ab9']]])
-                }
-            }
-        }
+        
         stage('Build') {
             steps {
                 sh '''
