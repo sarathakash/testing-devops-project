@@ -1,11 +1,11 @@
 pipeline {
-    agent any
+    agent 1
     
     stages {
         
         stage('Build') {
             steps {
-                sh './build.sh'
+                sh './script/build.sh'
             }
         }
         stage('Deploy') {
@@ -13,7 +13,7 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: "${DOCKER_HUB_CREDENTIALS}", passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
                     sh '''
                         echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
-                        ./build.sh
+                        ./script/build.sh
                     '''
                 }
             }
