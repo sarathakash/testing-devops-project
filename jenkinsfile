@@ -11,11 +11,11 @@ pipeline {
         stage('Checkout SCM') {
             steps {
                 script {
-                    def branchName = env.BRANCH_NAME ?: 'Prod'
-                    checkout([$class: 'GitSCM', branches: [[name: "*/${branchName}"]],
+                    def branchName = env.BRANCH_NAME ?: 'main'
+                    checkout([$class: 'GitSCM', branches: [[name: "*/${main}"]],
                               doGenerateSubmoduleConfigurations: false, extensions: [],
                               userRemoteConfigs: [[url: '',
-                                                   credentialsId: '3c5cf833-313a-4c9a-bf52-3e2609df6860']]])
+                                                   credentialsId: '790d4f9c-ab11-4f3a-99d1-d9d4e98e4ab9']]])
                 }
             }
         }
