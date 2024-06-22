@@ -8,4 +8,5 @@ pipeline {
                 sh 'chmod +x deploy.sh && ./deploy.sh'
             }
         }
-  
+    }
+}
