@@ -7,7 +7,7 @@ pipeline {
             steps {
                 sh '''
                     sudo chmod +x build.sh
-                    sudo ./build.sh
+                    sudo /testing-devops-project/build.sh
                 '''
             }
         }
@@ -17,7 +17,7 @@ pipeline {
                     sh '''
                         echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
                         sudo chmod +x deploy.sh
-                        sudo ./deploy.sh
+                        sudo /testing-devops-project/build.sh
                     '''
                 }
             }
