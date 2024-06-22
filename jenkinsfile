@@ -1,29 +1,35 @@
 pipeline {
-  agent any
+    agent any
 
-  stages {
-    stage('Build') {
-      steps {
-        withCredentials([usernamePassword(credentialsId: "${DOCKER_REGISTRY_CREDS}", passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')])
-        sh './build.sh'
-      }
+    environment {
+        DOCKER_REGISTRY_CREDS = "${DOCKER_REGISTRY_CREDS}" // Define your Docker registry credentials ID
     }
-    stage('Deploy & push') {
-      steps {
-        
-         {
-          sh "echo \$DOCKER_PASSWORD | docker login -u \$DOCKER_USERNAME --password-stdin docker.io"
-          sh './deploy.sh'
+
+    stages {
+        stage('Build') {
+            steps {
+                sh 'chmod +x build.sh'
+                sh './build.sh'
+            }
         }
-      }
+        stage('Deploy & Push') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: "${DOCKER_REGISTRY_CREDS}", passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+                    sh """
+                        echo \$DOCKER_PASSWORD | docker login -u \$DOCKER_USERNAME --password-stdin docker.io
+                        chmod +x deploy.sh
+                        ./deploy.sh
+                    """
+                }
+            }
+        }
     }
-    
-  }
 
-post{
-      always{
-            sh 'docker run -d -p 80:80 sarathakashk95/prod:latest'
-}
-
-}
+    post {
+        always {
+            script {
+                sh 'docker run -d -p 80:80 sarathakashk95/prod:latest'
+            }
+        }
+    }
 }
