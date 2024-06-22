@@ -3,14 +3,11 @@ pipeline {
     environment {
         DOCKER_HUB_CREDENTIALS = credentials('DOCKER_HUB_CREDENTIALS')
     }
-    stages {
-        
+    stages {        
         stage('Build') {
             steps {
-                sh '''
-                    chmod +x build.sh
-                    ./build.sh
-                '''
+                sh 'chmod +x build.sh'
+                sh './build.sh'
             }
         }
         stage('Deploy') {
