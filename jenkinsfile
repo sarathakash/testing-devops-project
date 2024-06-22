@@ -1,12 +1,22 @@
 pipeline {
     agent any
-        stage('Deploy & push') {
-            steps {withCredentials([usernamePassword(credentialsId: "${DOCKER_REGISTRY_CREDS}", passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+
+    stages {
+        stage('Build') {
+            steps {
+                steps {withCredentials([usernamePassword(credentialsId: "${DOCKER_REGISTRY_CREDS}", passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
                 sh "echo \$DOCKER_PASSWORD | docker login -u \$DOCKER_USERNAME --password-stdin docker.io"
-                echo 'Deploying...'
-                sh 'chmod +x build.sh && ./build.sh'
-                sh 'chmod +x deploy.sh && ./deploy.sh'
+                echo 'Building...'
+                sh 'sudo chmod +x build.sh && ./build.sh'
+                
+                    }
+                }
             }
         }
     }
-}
+        stage('Deploy & push') {
+                echo 'Deploying...'
+                
+                sh 'sudo chmod +x deploy.sh && ./deploy.sh'
+            }
+        }
