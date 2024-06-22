@@ -3,10 +3,6 @@ pipeline {
     environment {
         DOCKER_HUB_CREDENTIALS = credentials('DOCKER_HUB_CREDENTIALS')
     }
-    triggers {
-        // Poll the repository every 5 minutes (adjust as necessary)
-        pollSCM('H/5 * * * *')
-    }
     stages {
         
         stage('Build') {
