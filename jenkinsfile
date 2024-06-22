@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    environment {
+        DOCKER_HUB_CREDENTIALS = credentials('DOCKER_HUB_CREDENTIALS') // Make sure this matches your Jenkins credentials ID
+    }
     stages {
         
         stage('Build') {
