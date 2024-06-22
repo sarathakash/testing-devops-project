@@ -1,35 +1,48 @@
 pipeline {
     agent any
-
     environment {
-        DOCKER_REGISTRY_CREDS = "${DOCKER_REGISTRY_CREDS}" // Define your Docker registry credentials ID
+        DOCKER_HUB_CREDENTIALS = credentials('DOCKER_HUB_CREDENTIALS')
     }
-
+    triggers {
+        // Poll the repository every 5 minutes (adjust as necessary)
+        pollSCM('H/5 * * * *')
+    }
     stages {
-        stage('Build') {
+        stage('Checkout SCM') {
             steps {
-                sh 'sudo chmod +x build.sh'
-                sh 'sudo ./build.sh'
-            }
-        }
-        stage('Deploy & Push') {
-            steps {
-                withCredentials([usernamePassword(credentialsId: "${DOCKER_REGISTRY_CREDS}", passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
-                    sh """
-                        echo \$DOCKER_PASSWORD | docker login -u \$DOCKER_USERNAME --password-stdin docker.io
-                        chmod +x deploy.sh
-                        ./deploy.sh
-                    """
+                script {
+                    def branchName = env.BRANCH_NAME ?: 'Prod'
+                    checkout([$class: 'GitSCM', branches: [[name: "*/${branchName}"]],
+                              doGenerateSubmoduleConfigurations: false, extensions: [],
+                              userRemoteConfigs: [[url: 'https://github.com/N-Moorthy/CapstoneProject.git',
+                                                   credentialsId: '790d4f9c-ab11-4f3a-99d1-d9d4e98e4ab9']]])
                 }
             }
         }
+        stage('Build') {
+            steps {
+                sh '''
+                    chmod +x build.sh
+                    ./build.sh
+                '''
+            }
+        }
+        stage('Deploy') {
+            steps {
+                sh '''
+                    chmod +x deploy.sh
+                    ./deploy.sh
+                '''
+            }
+        }
     }
-
     post {
         always {
-            script {
-                sh 'docker run -d -p 80:80 sarathakashk95/prod:latest'
-            }
+            echo 'Cleaning up...'
+            sh 'docker logout'
+        }
+        failure {
+            echo 'Deployment failed.'
         }
     }
 }
