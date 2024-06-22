@@ -6,7 +6,6 @@ pipeline {
         stage('Build') {
             steps {
                 sh '''
-                    sudo chmod +x build.sh
                     sudo /testing-devops-project/build.sh
                 '''
             }
@@ -16,7 +15,6 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: "${DOCKER_HUB_CREDENTIALS}", passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
                     sh '''
                         echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
-                        sudo chmod +x deploy.sh
                         sudo /testing-devops-project/build.sh
                     '''
                 }
