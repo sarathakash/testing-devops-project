@@ -4,21 +4,9 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-         withCredentials([usernamePassword(credentialsId: "${DOCKER_HUB_CREDENTIALS}", passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]){
-        sh "echo \$DOCKER_PASSWORD | docker login -u \$DOCKER_USERNAME --password-stdin docker.io"
-        sh './script/build.sh'
+        sh './script/hello.sh'
       }
     }
 
-  }
-    stage('Deploy & push') {
-      steps {
-        withCredentials([usernamePassword(credentialsId: "${DOCKER_HUB_CREDENTIALS}", passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
-          sh "echo \$DOCKER_PASSWORD | docker login -u \$DOCKER_USERNAME --password-stdin docker.io"
-          sh './script/script.sh'
-        }
-      }
-    }
-    
   }
 }
