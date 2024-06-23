@@ -5,7 +5,7 @@ pipeline {
     stage('Build') {
       steps {
         sh 'docker build -t ngimg .'
-        sh 'docker run --name nginx-container3 -d -p 4005:80  ngimg'
+        sh 'docker run --name nginx-container4 -d -p 4005:80  ngimg'
         sh 'docker-compose up -d'
         sh 'docker-compose build'
         sh 'docker tag ngimg $DOCKER_BFLASK_IMAGE'
