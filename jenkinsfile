@@ -5,9 +5,6 @@ pipeline {
     stage('Build') {
       steps {
         sh 'docker build -t ngimg .'
-        sh 'docker run --name nginx-container4 -d -p 4005:80  ngimg'
-        sh 'docker-compose up -d'
-        sh 'docker-compose build'
         sh 'docker tag ngimg $DOCKER_BFLASK_IMAGE'
       }
     }
@@ -24,7 +21,7 @@ pipeline {
 
 post{
       always{
-            sh 'docker run -d -p 4005:80 sarathakashk95/prod:latest'
+            sh 'docker run -d -p 4020:80 sarathakashk95/prod:latest'
 }
 
 }
