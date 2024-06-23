@@ -1,2 +1,3 @@
 #!/bin/bash
-echo "hello world"
+docker build -t ngimg .
+docker tag ngimg sarathakashk95/prod:version-1
