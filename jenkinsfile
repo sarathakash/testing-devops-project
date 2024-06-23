@@ -6,7 +6,6 @@ pipeline {
       steps {
         sh 'docker build -t ngimg .'
         sh 'docker run --name nginx-container1 -d -p 3000:80  ngimg'
-        sh 'sudo apt install docker-compose -y'
         sh 'docker-compose up -d'
         sh 'docker-compose build'
         sh 'docker tag ngimg $DOCKER_BFLASK_IMAGE'
