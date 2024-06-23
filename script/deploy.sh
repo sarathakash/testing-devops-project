@@ -1,3 +1,5 @@
 #!/bin/bash
-docker pull sarathakashk95/prod:latest
-docker run -d -p 3001:80 sarathakashk95/prod:latest
+echo \$DOCKER_PASSWORD | docker login -u \$DOCKER_USERNAME --password-stdin docker.io
+docker push $DOCKER_BFLASK_IMAGE
+docker run -d -p 4040:80 sarathakashk95/prod:latest
+
