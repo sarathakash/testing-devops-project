@@ -1,4 +1,4 @@
 #!/bin/bash
 echo \$DOCKER_PASSWORD | docker login -u \$DOCKER_USERNAME --password-stdin docker.io
 docker push $DOCKER_BFLASK_IMAGE
-docker run -d -p 8001:80 $DOCKER_BFLASK_IMAGE
+docker run -d -p 8002:80 $DOCKER_BFLASK_IMAGE
